@@ -1,0 +1,295 @@
+﻿@page "/painel"
+@rendermode InteractiveServer
+
+@using Microsoft.EntityFrameworkCore
+@using VacinAcao.Models
+
+@inject VacinAcao.AppDbContext Db
+@inject NavigationManager Navigation
+
+<PageTitle>Painel | VacinAção</PageTitle>
+
+<div class="painel">
+
+    <header class="topo">
+
+        <div>
+            <span class="logo">✚ VacinAção</span>
+        </div>
+
+        <button class="btn-sair" @onclick="Sair">
+            Sair
+        </button>
+
+    </header>
+
+    <main class="conteudo">
+
+        <section class="boas-vindas">
+
+            <div>
+                <p class="pequeno">PAINEL DO CIDADÃO</p>
+
+                <h1>Olá, @nomeUsuario! 👋</h1>
+
+                <p>
+                    Acompanhe sua vacinação de forma simples,
+                    segura e organizada.
+                </p>
+            </div>
+
+        </section>
+
+        <section class="cards">
+
+            <a href="/historico" class="card">
+
+                <div class="icone">💉</div>
+
+                <h2>Histórico Vacinal</h2>
+
+                <p>
+                    Consulte suas vacinas e acompanhe
+                    seu histórico de vacinação.
+                </p>
+
+                <span>Ver histórico →</span>
+
+            </a>
+
+            <a href="/calendario" class="card">
+
+                <div class="icone">📅</div>
+
+                <h2>Calendário</h2>
+
+                <p>
+                    Veja as próximas doses e acompanhe
+                    as datas recomendadas.
+                </p>
+
+                <span>Ver calendário →</span>
+
+            </a>
+
+            <a href="/agendamento" class="card">
+
+                <div class="icone">🗓️</div>
+
+                <h2>Agendamento</h2>
+
+                <p>
+                    Escolha uma data e horário para
+                    realizar sua vacinação.
+                </p>
+
+                <span>Agendar atendimento →</span>
+
+            </a>
+
+            <a href="/unidades" class="card">
+
+                <div class="icone">🏥</div>
+
+                <h2>Unidades de Saúde</h2>
+
+                <p>
+                    Consulte as unidades disponíveis
+                    para atendimento.
+                </p>
+
+                <span>Ver unidades →</span>
+
+            </a>
+
+        </section>
+
+        <section class="aviso">
+
+            <div class="aviso-icone">
+                🔔
+            </div>
+
+            <div>
+                <h3>Fique atento às suas vacinas</h3>
+
+                <p>
+                    O VacinAção ajuda você a acompanhar
+                    suas próximas doses e manter sua
+                    vacinação em dia.
+                </p>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<style>
+
+    .painel {
+        min-height: 100vh;
+        background: #f5f8fc;
+    }
+
+    .topo {
+        height: 70px;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 45px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .logo {
+        font-size: 23px;
+        font-weight: 700;
+        color: #0d6efd;
+    }
+
+    .btn-sair {
+        border: none;
+        background: #f1f3f5;
+        color: #333;
+        padding: 10px 20px;
+        border-radius: 9px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .btn-sair:hover {
+        background: #e2e6ea;
+    }
+
+    .conteudo {
+        max-width: 1100px;
+        margin: auto;
+        padding: 45px 25px;
+    }
+
+    .boas-vindas {
+        background: linear-gradient(135deg, #0d6efd, #20c997);
+        color: white;
+        border-radius: 20px;
+        padding: 35px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(13, 110, 253, 0.18);
+    }
+
+    .pequeno {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        margin-bottom: 8px;
+        opacity: 0.85;
+    }
+
+    .boas-vindas h1 {
+        font-size: 34px;
+        margin: 0 0 10px 0;
+    }
+
+    .boas-vindas p {
+        margin: 0;
+        font-size: 16px;
+    }
+
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    .card {
+        background: white;
+        padding: 28px;
+        border-radius: 18px;
+        text-decoration: none;
+        color: #222;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+        transition: 0.2s;
+    }
+
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.10);
+    }
+
+    .icone {
+        font-size: 35px;
+        margin-bottom: 15px;
+    }
+
+    .card h2 {
+        font-size: 21px;
+        margin-bottom: 10px;
+    }
+
+    .card p {
+        color: #666;
+        line-height: 1.5;
+        min-height: 48px;
+    }
+
+    .card span {
+        display: inline-block;
+        margin-top: 12px;
+        color: #0d6efd;
+        font-weight: 600;
+    }
+
+    .aviso {
+        margin-top: 25px;
+        background: white;
+        border-radius: 18px;
+        padding: 25px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .aviso-icone {
+        font-size: 32px;
+    }
+
+    .aviso h3 {
+        margin: 0 0 6px 0;
+    }
+
+    .aviso p {
+        margin: 0;
+        color: #666;
+    }
+
+</style>
+
+@code {
+
+    [SupplyParameterFromQuery(Name = "email")]
+    private string? Email { get; set; }
+
+    private string nomeUsuario = "cidadão";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrWhiteSpace(Email))
+        {
+            var usuario = await Db.Usuarios
+                .FirstOrDefaultAsync(u => u.Email == Email);
+
+            if (usuario != null)
+            {
+                nomeUsuario = usuario.NomeCompleto;
+            }
+        }
+    }
+
+    private void Sair()
+    {
+        Navigation.NavigateTo("/login");
+    }
+
+}

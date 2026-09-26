@@ -1,5 +1,10 @@
-﻿
-@page "/login"
+﻿@page "/login"
+@rendermode InteractiveServer
+
+@using VacinAcao.Models
+@using Microsoft.EntityFrameworkCore
+@inject VacinAcao.AppDbContext Db
+@inject NavigationManager Navigation
 
 <PageTitle>Entrar | VacinAção</PageTitle>
 
@@ -26,21 +31,23 @@
             <div class="campo">
                 <label>E-mail</label>
 
-                <input type="email"
+                <input @bind="email"
+                       type="email"
                        placeholder="seu@email.com" />
             </div>
 
             <div class="campo">
                 <label>Senha</label>
 
-                <input type="password"
+                <input @bind="senha"
+                       type="password"
                        placeholder="Digite sua senha" />
             </div>
 
             <div class="opcoes">
 
                 <label class="lembrar">
-                    <input type="checkbox" />
+                    <input type="checkbox" @bind="lembrarDeMim" />
                     Lembrar de mim
                 </label>
 
@@ -50,7 +57,14 @@
 
             </div>
 
-            <button class="btn-entrar">
+            @if (!string.IsNullOrEmpty(mensagem))
+            {
+                <div class="mensagem">
+                    @mensagem
+                </div>
+            }
+
+            <button class="btn-entrar" @onclick="Entrar">
                 Entrar na minha conta
             </button>
 
@@ -136,6 +150,12 @@
         box-sizing: border-box;
     }
 
+    .campo input:focus {
+        outline: none;
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.10);
+    }
+
     .opcoes {
         display: flex;
         justify-content: space-between;
@@ -155,6 +175,10 @@
         text-decoration: none;
     }
 
+    .opcoes a:hover {
+        text-decoration: underline;
+    }
+
     .btn-entrar {
         width: 100%;
         padding: 14px;
@@ -165,10 +189,22 @@
         font-size: 16px;
         font-weight: 600;
         cursor: pointer;
+        transition: 0.2s;
     }
 
     .btn-entrar:hover {
         background: #0b5ed7;
+        transform: translateY(-1px);
+    }
+
+    .mensagem {
+        background: #ffe5e5;
+        color: #b00020;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: 14px;
     }
 
     .cadastro-link {
@@ -193,5 +229,46 @@
         text-decoration: none;
     }
 
+    .voltar-home a:hover {
+        color: #0d6efd;
+    }
+
 </style>
 
+@code {
+
+    private string email = string.Empty;
+
+    private string senha = string.Empty;
+
+    private bool lembrarDeMim = false;
+
+    private string mensagem = string.Empty;
+
+    private async Task Entrar()
+    {
+        mensagem = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(email) ||
+            string.IsNullOrWhiteSpace(senha))
+        {
+            mensagem = "Digite seu e-mail e sua senha.";
+            return;
+        }
+
+        var usuario = await Db.Usuarios
+            .FirstOrDefaultAsync(u =>
+                u.Email == email &&
+                u.Senha == senha);
+
+        if (usuario == null)
+        {
+            mensagem = "E-mail ou senha incorretos.";
+            return;
+        }
+
+        Navigation.NavigateTo(
+            $"/painel?email={Uri.EscapeDataString(usuario.Email)}"
+        );
+    }
+}

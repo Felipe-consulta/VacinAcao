@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using VacinAcao.Models;
 
 namespace VacinAcao
 {
@@ -8,5 +9,7 @@ namespace VacinAcao
             : base(options)
         {
         }
+
+        public DbSet<Usuario> Usuarios { get; set; }
     }
 }
